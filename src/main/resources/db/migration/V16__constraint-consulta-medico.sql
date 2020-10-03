@@ -1,0 +1,1 @@
+ALTER TABLE consulta ADD CONSTRAINT fk_medico_consulta FOREIGN KEY(medico_id)REFERENCES medico(id);

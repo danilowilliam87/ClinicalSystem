@@ -1,0 +1,1 @@
+ALTER TABLE medico ADD CONSTRAINT fk_medico_especialidade FOREIGN KEY(especialidade_id)REFERENCES especialidade(id);

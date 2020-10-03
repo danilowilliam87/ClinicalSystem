@@ -1,0 +1,1 @@
+ALTER TABLE log_consulta ADD CONSTRAINT fk_logconsulta_consulta FOREIGN KEY(consulta_id) REFERENCES consulta(id);

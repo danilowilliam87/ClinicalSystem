@@ -1,0 +1,10 @@
+CREATE TABLE funcionario(
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100)NOT NULL,
+    cpf VARCHAR(14)NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    matricula VARCHAR(10) NOT NULL,
+    senha VARCHAR(100) NOT NULL,
+    perfil VARCHAR(10),
+    PRIMARY KEY(id)
+);

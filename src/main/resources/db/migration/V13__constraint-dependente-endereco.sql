@@ -1,0 +1,1 @@
+ALTER TABLE dependente ADD CONSTRAINT fk_dependente_endereco FOREIGN KEY(endereco_id)REFERENCES endereco(id);

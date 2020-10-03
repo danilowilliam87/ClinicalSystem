@@ -1,0 +1,1 @@
+ALTER TABLE paciente ADD CONSTRAINT fk_paciente_endereco FOREIGN KEY(endereco_id) REFERENCES endereco(id);

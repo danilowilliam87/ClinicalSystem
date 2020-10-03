@@ -1,0 +1,1 @@
+ALTER TABLE paciente ADD CONSTRAINT fk_paciente_convenio FOREIGN KEY (convenio_id) REFERENCES convenio(id);
