@@ -2,6 +2,7 @@ package io.github.danilowilliam.ClinicalSystem.service;
 
 import io.github.danilowilliam.ClinicalSystem.model.Medico;
 import io.github.danilowilliam.ClinicalSystem.repository.MedicoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.Optional;
 @Service
 public class MedicoService {
 
+    @Autowired
     private MedicoRepository repository;
 
     public List<Medico>listarTodos(){
