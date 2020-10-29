@@ -34,7 +34,7 @@ public class EnderecoController {
         if (service.deletar(id)){
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
         }
     }
 

@@ -56,7 +56,7 @@ public class ConvenioController {
         if(service.deletar(id)){
             return new ResponseEntity<Convenio>(HttpStatus.OK);
         } else {
-            return new ResponseEntity<Convenio>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Convenio>(HttpStatus.NOT_MODIFIED);
         }
     }
 

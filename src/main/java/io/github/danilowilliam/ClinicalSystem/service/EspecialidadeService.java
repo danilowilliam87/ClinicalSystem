@@ -36,7 +36,9 @@ public class EspecialidadeService {
 
     public boolean deletar(Long id){
         Optional<Especialidade> busca = repository.findById(id);
-        busca.ifPresent(especialidade -> repository.delete(especialidade));
+        if (busca.isPresent()){
+        repository.deleteById(id);
+        }
         return true;
     }
 }
