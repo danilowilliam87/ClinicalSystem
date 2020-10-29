@@ -11,7 +11,7 @@ public class Endereco {
     private String logradouro;
     @Column(name = "numero_residencia")
     private int numero;
-    private String cidadde;
+    private String cidade;
     private String estado;
 
     public Long getId() {
@@ -46,12 +46,12 @@ public class Endereco {
         this.numero = numero;
     }
 
-    public String getCidadde() {
-        return cidadde;
+    public String getCidade() {
+        return cidade;
     }
 
-    public void setCidadde(String cidadde) {
-        this.cidadde = cidadde;
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
     }
 
     public String getEstado() {

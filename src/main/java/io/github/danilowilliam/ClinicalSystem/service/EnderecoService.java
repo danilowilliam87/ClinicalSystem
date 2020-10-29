@@ -17,6 +17,7 @@ public class EnderecoService {
     public List<Endereco>listarTodos(){
         return repository.findAll();
     }
+
     public Optional<Endereco>buscaPorId(Long id){
         return repository.findById(id);
     }
@@ -32,7 +33,7 @@ public class EnderecoService {
             novo.setCep(endereco.getCep());
             novo.setLogradouro(endereco.getLogradouro());
             novo.setNumero(endereco.getNumero());
-            novo.setCidadde(endereco.getCidadde());
+            novo.setCidade(endereco.getCidade());
             novo.setEstado(endereco.getEstado());
             repository.save(novo);
             return true;
@@ -43,7 +44,11 @@ public class EnderecoService {
 
     public boolean deletar(Long id){
         Optional<Endereco>endereco = repository.findById(id);
-        endereco.ifPresent(result -> repository.delete(result));
-        return true;
+        if(endereco.isPresent()){
+            repository.deleteById(id);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

@@ -25,7 +25,8 @@ public class ConvenioController {
     public ResponseEntity<Convenio> getById(@PathVariable("id") Long id){
        Optional <Convenio> busca = service.buscarPorId(id);
         //se o objeto for encontrado...
-        if (busca.isPresent()) return new ResponseEntity<Convenio>(busca.get(), HttpStatus.OK);
+        if (busca.isPresent())
+            return new ResponseEntity<Convenio>(busca.get(), HttpStatus.OK);
         else {
     	   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
        }
