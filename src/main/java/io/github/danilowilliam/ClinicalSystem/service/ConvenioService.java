@@ -42,7 +42,7 @@ public class ConvenioService {
     public boolean deletar(Long id){
         Optional<Convenio>convenio = repository.findById(id);
         if (convenio.isPresent()){
-            repository.delete(convenio.get());
+            repository.deleteById(id);
             return true;
         } else {
             return false;
