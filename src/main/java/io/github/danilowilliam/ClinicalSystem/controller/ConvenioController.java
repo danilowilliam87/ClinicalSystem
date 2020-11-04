@@ -36,6 +36,7 @@ public class ConvenioController {
     @PostMapping
      public ResponseEntity<Convenio>salvar(@RequestBody Convenio convenio){
         service.salvar(convenio);
+  
         return new ResponseEntity<>(convenio, HttpStatus.OK);
     }
 
