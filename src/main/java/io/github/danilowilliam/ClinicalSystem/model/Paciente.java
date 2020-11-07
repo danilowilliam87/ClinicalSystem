@@ -1,5 +1,7 @@
 package io.github.danilowilliam.ClinicalSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -14,17 +16,21 @@ public class Paciente {
     private String cpf;
     private String telefone;
     @Column(name = "data_nascimento")
+    @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
-    @OneToOne
+
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
+
     @OneToMany(mappedBy = "paciente")
     private List<Dependente>dependentes;
 
     @OneToMany(mappedBy = "paciente")
     private List<Consulta>consultas;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 
     public List<Consulta> getConsultas() {
