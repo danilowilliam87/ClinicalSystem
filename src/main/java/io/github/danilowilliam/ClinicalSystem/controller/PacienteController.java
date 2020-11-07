@@ -21,28 +21,18 @@ public class PacienteController {
     @Autowired
     private PacienteService service;
 
-    @Autowired
-    private ConvenioService convenioService;
 
-    @Autowired
-    private EnderecoService enderecoService;
-
-    //método pra teste. não será usado no funcionamento da api
-    @PostMapping("/salvar")
-    public ResponseEntity<Paciente> salvar(@RequestBody  Paciente paciente,
-                                           @RequestBody Convenio convenio,
-                                           @RequestBody Endereco endereco){
-        Optional<Endereco> novo = enderecoService.buscaPorId(endereco.getId());
-        if (novo.isPresent()) {
-            paciente.setEndereco(novo.get());
+    @GetMapping("/busca/{id}")
+    public ResponseEntity<Paciente> buscaPeloId(@PathVariable("id") Long id){
+        Optional<Paciente>busca = service.buscaPorId(id);
+        if (busca.isPresent()){
+            return new ResponseEntity<Paciente>(busca.get(), HttpStatus.FOUND);
+        } else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        Optional<Convenio>novoConvenio = convenioService.buscarPorId(convenio.getId());
-        if (novoConvenio.isPresent()){
-        paciente.setConvenio(novoConvenio.get());
-        }
-        service.salvar(paciente);
-        return new ResponseEntity<>(paciente, HttpStatus.CREATED);
     }
+
+
 
 
     //retorna todos os pacientes
@@ -69,5 +59,15 @@ public class PacienteController {
          } else{
              return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
          }
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Paciente>deletar(@PathVariable("id")Long id){
+        boolean ok = service.deletar(id);
+        if (ok){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else{
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
     }
 }
