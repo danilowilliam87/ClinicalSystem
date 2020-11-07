@@ -35,8 +35,8 @@ public class PacienteService {
             novo.setTelefone(paciente.getTelefone());
             novo.setConvenio(paciente.getConvenio());
             novo.setConsultas(paciente.getConsultas());
-            novo.setDependentes(paciente.getDependentes());
             novo.setEndereco(paciente.getEndereco());
+            repository.save(novo);
             return true;
         }else {
             return false;

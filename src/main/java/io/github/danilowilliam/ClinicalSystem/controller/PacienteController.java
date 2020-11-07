@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("paciente")
+@RequestMapping("/paciente")
 public class PacienteController {
 
     @Autowired
@@ -59,5 +59,15 @@ public class PacienteController {
     public ResponseEntity<Paciente> save(@RequestBody Paciente paciente){
         service.salvar(paciente);
         return new ResponseEntity<>(paciente, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/atualizar/{id}")
+    public ResponseEntity<Paciente>alterar(@RequestBody Paciente pacienteUpdate, @PathVariable("id")Long id){
+         boolean ok = service.atualizar(id, pacienteUpdate);
+         if (ok){
+             return new ResponseEntity<>(pacienteUpdate, HttpStatus.OK);
+         } else{
+             return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+         }
     }
 }
