@@ -19,7 +19,7 @@ public class Dependente {
 
     @ManyToOne
     private Paciente paciente;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
 
 

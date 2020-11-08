@@ -33,8 +33,6 @@ public class PacienteController {
     }
 
 
-
-
     //retorna todos os pacientes
     @GetMapping("/lista")
     public List<Paciente>lista(){
