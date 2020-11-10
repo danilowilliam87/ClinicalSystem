@@ -17,7 +17,7 @@ public class Dependente {
     @OneToMany(mappedBy = "dependente")
     private List<Consulta>consultas;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Paciente paciente;
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;

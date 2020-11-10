@@ -33,4 +33,38 @@ public class DependenteController {
             return new ResponseEntity<>( HttpStatus.NOT_FOUND);
         }
     }
+
+    @PostMapping("/salvar")
+    public ResponseEntity<Dependente>save(@RequestBody Dependente dependente){
+         service.salvar(dependente);
+         Dependente dto = new Dependente();
+         dto.setNome(dependente.getNome());
+         dto.setEmail(dependente.getEmail());
+         return new ResponseEntity<>(dto, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/alterar/{id}")
+    public ResponseEntity<Dependente>alterar(
+            @RequestBody Dependente dependente,
+            @PathVariable Long id){
+        boolean ok = service.atualizar(id,dependente);
+        if (ok){
+            Dependente dto = new Dependente();
+            dto.setNome(dependente.getNome());
+            dto.setEmail(dependente.getEmail());
+            return new ResponseEntity<Dependente>(dto,HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
+
+    @DeleteMapping("/deletar/{id}")
+    public ResponseEntity<Dependente>deletar(@PathVariable Long id){
+        boolean delete = service.deletar(id);
+        if (delete){
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+        }
+    }
 }
