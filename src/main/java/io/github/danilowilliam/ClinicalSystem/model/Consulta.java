@@ -1,9 +1,16 @@
 package io.github.danilowilliam.ClinicalSystem.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class Consulta {
 
     @Id
@@ -28,91 +35,5 @@ public class Consulta {
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Medico getMedico() {
-        return medico;
-    }
-
-    public void setMedico(Medico medico) {
-        this.medico = medico;
-    }
-
-    public Paciente getPaciente() {
-        return paciente;
-    }
-
-    public void setPaciente(Paciente paciente) {
-        this.paciente = paciente;
-    }
-
-    public Funcionario getFuncionario() {
-        return funcionario;
-    }
-
-    public void setFuncionario(Funcionario funcionario) {
-        this.funcionario = funcionario;
-    }
-
-    public Double getValor() {
-        return valor;
-    }
-
-    public void setValor(Double valor) {
-        this.valor = valor;
-    }
-
-    public String getFormaPagamento() {
-        return formaPagamento;
-    }
-
-    public void setFormaPagamento(String formaPagamento) {
-        this.formaPagamento = formaPagamento;
-    }
-
-    public String getInformacoesAdicionais() {
-        return informacoesAdicionais;
-    }
-
-    public void setInformacoesAdicionais(String informacoesAdicionais) {
-        this.informacoesAdicionais = informacoesAdicionais;
-    }
-
-    public String getSituacao() {
-        return situacao;
-    }
-
-    public void setSituacao(String situacao) {
-        this.situacao = situacao;
-    }
-
-    public LocalDate getDataMarcacao() {
-        return dataMarcacao;
-    }
-
-    public void setDataMarcacao(LocalDate dataMarcacao) {
-        this.dataMarcacao = dataMarcacao;
-    }
-
-    public LocalDate getDataConsulta() {
-        return dataConsulta;
-    }
-
-    public void setDataConsulta(LocalDate dataConsulta) {
-        this.dataConsulta = dataConsulta;
-    }
-
-    public Dependente getDependente() {
-        return dependente;
-    }
-
-    public void setDependente(Dependente dependente) {
-        this.dependente = dependente;
-    }
 }
