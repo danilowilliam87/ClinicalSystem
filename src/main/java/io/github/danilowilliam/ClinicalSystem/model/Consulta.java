@@ -35,5 +35,33 @@ public class Consulta {
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
 
+    public Consulta(Long id, Medico medico, Paciente paciente, LocalDate dataConsulta, String informacoesAdicionais){
+        this.id = id;
+        this.medico = medico;
+        this.paciente = paciente;
+        this.dataConsulta = dataConsulta;
+        this.informacoesAdicionais = informacoesAdicionais;
+    }
+
+    public Consulta(Long id, Medico medico, Dependente dependente, LocalDate dataConsulta, String informacoesAdicionais){
+        this.id = id;
+        this.medico = medico;
+        this.dependente = dependente;
+        this.dataConsulta = dataConsulta;
+        this.informacoesAdicionais = informacoesAdicionais;
+    }
+
+    public Consulta(String formaPagamento,
+                    String informacoesAdicionais,
+                    LocalDate dataMarcacao,
+                    LocalDate dataConsulta,
+                    String situacao){
+        this.formaPagamento = formaPagamento;
+        this.informacoesAdicionais = informacoesAdicionais;
+        this.dataMarcacao = dataMarcacao;
+        this.dataConsulta = dataConsulta;
+        this.situacao = situacao;
+
+    }
 
 }
