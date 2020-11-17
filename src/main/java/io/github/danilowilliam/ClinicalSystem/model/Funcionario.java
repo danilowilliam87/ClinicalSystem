@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.function.Function;
 
 @Entity
 @Data
@@ -24,6 +25,21 @@ public class Funcionario {
 
     @OneToMany(mappedBy = "funcionario")
     private List<Consulta>consultas;
+    public Funcionario(String nome,String cpf,String email,String matricula,String senha){
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.matricula = matricula;
+        this.senha = senha;
+    }
 
+    public Funcionario(String nome,String cpf,String email,String matricula,String senha,String perfil){
+        this.nome = nome;
+        this.cpf = cpf;
+        this.email = email;
+        this.matricula = matricula;
+        this.senha = senha;
+        this.perfil = perfil;
+    }
 
 }

@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Data
@@ -21,9 +22,15 @@ public class Convenio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
+    @NotBlank
     private String nome;
+    @NotBlank
     @Column(nullable = false)
     private String tipo;
 
+    public Convenio(String nome, String tipo){
+        this.nome = nome;
+        this.tipo = tipo;
+    }
 
 }

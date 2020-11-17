@@ -33,6 +33,16 @@ public class Dependente {
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
 
+    public Dependente(String nome,String email,String telefone,String cpf){
+        this.nome = nome;
+        this.email = email;
+        this.cpf = cpf;
+        this.telefone = telefone;
+    }
+
+    public Dependente(List<Consulta>consultas){
+        this.consultas = consultas;
+    }
 
 
 }
