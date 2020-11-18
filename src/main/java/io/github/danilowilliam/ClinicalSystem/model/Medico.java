@@ -26,5 +26,16 @@ public class Medico {
     @OneToMany(mappedBy = "medico")
     private List<Consulta>consultas;
 
+    public Medico(List<Consulta>consultas){
+        this.consultas = consultas;
+    }
+
+    public Medico(String nome,String cpf,String crm,String senha,Especialidade especialidade){
+        this.nome = nome;
+        this.senha = senha;
+        this.cpf = cpf;
+        this.crm = crm;
+        this.especialidade = especialidade;
+    }
 
 }

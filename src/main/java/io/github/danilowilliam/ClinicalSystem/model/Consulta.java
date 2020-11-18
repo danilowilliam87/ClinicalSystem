@@ -1,5 +1,6 @@
 package io.github.danilowilliam.ClinicalSystem.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -30,10 +31,16 @@ public class Consulta {
     @Column(name = "informacoes_adicionais")
     private String informacoesAdicionais;
     private String situacao;
-    @Column(name = "data_marcacao")
+    @Column(name = "data_marcacao",updatable = false)
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataMarcacao;
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
+
+    @PrePersist
+    private void setDataMarcacao(LocalDate dataMarcacao){
+        dataMarcacao = LocalDate.now();
+    }
 
     public Consulta(Long id, Medico medico, Paciente paciente, LocalDate dataConsulta, String informacoesAdicionais){
         this.id = id;
@@ -53,12 +60,10 @@ public class Consulta {
 
     public Consulta(String formaPagamento,
                     String informacoesAdicionais,
-                    LocalDate dataMarcacao,
                     LocalDate dataConsulta,
                     String situacao){
         this.formaPagamento = formaPagamento;
         this.informacoesAdicionais = informacoesAdicionais;
-        this.dataMarcacao = dataMarcacao;
         this.dataConsulta = dataConsulta;
         this.situacao = situacao;
 

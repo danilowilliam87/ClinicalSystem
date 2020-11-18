@@ -2,6 +2,7 @@ package io.github.danilowilliam.ClinicalSystem.service;
 
 import io.github.danilowilliam.ClinicalSystem.model.Convenio;
 import io.github.danilowilliam.ClinicalSystem.repository.ConvenioRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,11 @@ import java.util.Optional;
 
 @Service
 public class ConvenioService {
+
+    @Autowired
+    public ConvenioService(ConvenioRepository convenioRepository){
+        this.repository = convenioRepository;
+    }
 
     @Autowired
     private ConvenioRepository repository;

@@ -14,13 +14,11 @@ public class ConsultaPacienteRequestDTO {
     private String formaPagamento;
     private String informacoesAdicionais;
     private String situacao;
-    private LocalDate dataMarcacao;
     private LocalDate dataConsulta;
 
     public Consulta converter(){
         return new Consulta(formaPagamento,
                       informacoesAdicionais,
-                      dataMarcacao,
                       dataConsulta,
                       situacao);
     }
