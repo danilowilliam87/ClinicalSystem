@@ -24,9 +24,9 @@ public class ConsultaDependenteRequestDTO {
     private LocalDate dataConsulta;
 
     public Consulta converter(){
-        return new Consulta(formaPagamento,
+        return new Consulta(
+                formaPagamento,
                 informacoesAdicionais,
-                dataMarcacao,
                 dataConsulta,
                 situacao);
     }

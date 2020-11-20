@@ -17,7 +17,7 @@ public class LogConsulta {
     private Long id;
 
     @OneToOne
-    @Column(name = "consulta_id")
+    @JoinColumn(name = "consulta_id")
     private Consulta consulta;
     @Column(nullable = false)
     private String situacao;

@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class ConvenioResponseDTO {
     private Long id;
     private String nome;
-    private String senha;
+    private String tipo;
 
     public static ConvenioResponseDTO converter(Convenio convenio){
         return new ConvenioResponseDTO(convenio.getId(),

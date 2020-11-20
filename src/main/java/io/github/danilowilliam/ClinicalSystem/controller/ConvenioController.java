@@ -1,5 +1,7 @@
 package io.github.danilowilliam.ClinicalSystem.controller;
 
+import io.github.danilowilliam.ClinicalSystem.dto.request.ConvenioRequestDTO;
+import io.github.danilowilliam.ClinicalSystem.dto.response.ConvenioResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Convenio;
 import io.github.danilowilliam.ClinicalSystem.repository.ConvenioRepository;
 import io.github.danilowilliam.ClinicalSystem.service.ConvenioService;
@@ -10,18 +12,19 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.lang.module.ResolutionException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
 
 @RestController
 @RequestMapping("/convenio")
 public class ConvenioController {
 
-    @Autowired
-    private ConvenioService service;
 
     @Autowired
     private ConvenioRepository repository;
+
     //refatoração dos métodos
     @GetMapping("{id}")
     @ResponseBody
@@ -29,12 +32,16 @@ public class ConvenioController {
         //se existir o objeto com o id retorna
         //caso contrário retorará uma exceção
         return repository.findById(id)
+                .map(convenio -> {
+                    ConvenioResponseDTO.converter(convenio);
+                    return convenio;
+                })
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void apagar(Long id){
+    public void apagar(@PathVariable Long id){
         repository
                 .findById(id)    //busca o convenio
                 .map(convenio -> {    //se encontrar .. o map é responsável por executar alguma ação sobre o objeto ou gerar um novo objeto por exemplo
@@ -44,14 +51,15 @@ public class ConvenioController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));  //caso contrário...retornará uma exceção
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterar(Long id, Convenio convenioAtualizado){
+    public void alterar(@PathVariable Long id,@RequestBody ConvenioRequestDTO convenioAtualizado){
         repository
                 .findById(id)  //busca o convenio
                 .map(convenio -> {  //se encontrar...atualizará
-                    convenioAtualizado.setId(convenio.getId());
-                    return repository.save(convenioAtualizado);
+                       convenio.setNome(convenioAtualizado.getNome());
+                       convenio.setTipo(convenioAtualizado.getTipo());
+                       return repository.save(convenio);
                 }) //se não...lançará um exceção
                 .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
@@ -59,58 +67,19 @@ public class ConvenioController {
 
     @ResponseBody
     @GetMapping("/listagem")
-    public List<Convenio>listagem(){
-        return repository.findAll();
+    public List<ConvenioResponseDTO>listagem(){
+        List<ConvenioResponseDTO>dtos = new ArrayList<>();
+        repository.findAll()
+                .stream()
+                .forEach(convenio -> dtos.add(ConvenioResponseDTO.converter(convenio)));
+        return dtos;
     }
 
 
-
-
-    //GET
-    @GetMapping("/{id}")
-    public ResponseEntity<Convenio> getById(@PathVariable("id") Long id){
-       Optional <Convenio> busca = service.buscarPorId(id);
-        //se o objeto for encontrado...
-        if (busca.isPresent())
-            return new ResponseEntity<Convenio>(busca.get(), HttpStatus.OK);
-        else {
-    	   return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-       }
-    }
-
-    //POST
-    @PostMapping
-     public ResponseEntity<Convenio>salvar(@RequestBody Convenio convenio){
-        service.salvar(convenio);
-  
-        return new ResponseEntity<>(convenio, HttpStatus.OK);
-    }
-
-    //UPDATE
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Convenio>atualizar(@PathVariable("id") Long id, @RequestBody Convenio convenio){
-        if(service.alterar(id, convenio)) {
-            return new ResponseEntity<Convenio>(HttpStatus.OK);
-        } else{
-            return new ResponseEntity<Convenio>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-
-    //DELETE
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Convenio>deletar(@PathVariable("id") Long id){
-        if(service.deletar(id)){
-            return new ResponseEntity<Convenio>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<Convenio>(HttpStatus.NOT_MODIFIED);
-        }
-    }
-
-    //LIST
-    @GetMapping("/lista")
-    public List<Convenio> listar(){
-        return service.listarTodos();
+    @ResponseBody
+    @PostMapping("/salvar")
+    public Convenio salvar(@RequestBody ConvenioRequestDTO requestDTO){
+        return repository.save(requestDTO.converter());
     }
 
 

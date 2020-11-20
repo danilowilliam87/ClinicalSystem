@@ -10,7 +10,6 @@ import java.time.LocalDate;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
 public class Consulta {
 
@@ -37,10 +36,6 @@ public class Consulta {
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
 
-    @PrePersist
-    private void setDataMarcacao(LocalDate dataMarcacao){
-        dataMarcacao = LocalDate.now();
-    }
 
     public Consulta(Long id, Medico medico, Paciente paciente, LocalDate dataConsulta, String informacoesAdicionais){
         this.id = id;
@@ -66,6 +61,10 @@ public class Consulta {
         this.informacoesAdicionais = informacoesAdicionais;
         this.dataConsulta = dataConsulta;
         this.situacao = situacao;
+
+    }
+
+    public Consulta(){
 
     }
 
