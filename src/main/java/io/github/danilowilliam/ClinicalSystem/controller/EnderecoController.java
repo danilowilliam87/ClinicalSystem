@@ -1,5 +1,7 @@
 package io.github.danilowilliam.ClinicalSystem.controller;
 
+import io.github.danilowilliam.ClinicalSystem.dto.request.EnderecoRequestDTO;
+import io.github.danilowilliam.ClinicalSystem.dto.response.EnderecoResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Endereco;
 import io.github.danilowilliam.ClinicalSystem.repository.EnderecoRepository;
 import io.github.danilowilliam.ClinicalSystem.service.EnderecoService;
@@ -7,7 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,44 +20,81 @@ import java.util.Optional;
 public class EnderecoController {
 
     @Autowired
-    private EnderecoService service;
+    private EnderecoRepository repository;
 
-    @PostMapping("/salvar")
-    public ResponseEntity<Endereco>salvar(@RequestBody Endereco endereco){
-        service.salvar(endereco);
-        return new ResponseEntity<>(endereco, HttpStatus.OK);
-    }
+   @PostMapping("/salvar")
+   @ResponseBody
+   public Endereco salvar(@RequestBody EnderecoRequestDTO endereco){
+       return repository.save(endereco.converter());
+   }
 
-    @GetMapping("/lista")
-    public List<Endereco>lista(){
-        return service.listarTodos();
-    }
+   @GetMapping("/busca/{id}")
+   @ResponseBody
+   public Endereco buscaPorId(@PathVariable Long id){
+       return repository.findById(id)
+               .map(endereco -> {
+                   EnderecoResponseDTO.converter(endereco);
+                   return endereco;
+               }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
 
-    @DeleteMapping("/deletar/{id}")
-    public ResponseEntity<Endereco>deletar(@PathVariable("id") Long id){
-        if (service.deletar(id)){
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        }
-    }
+   @GetMapping("/busca-cep/{cep}")
+   @ResponseBody
+   public Endereco buscaPeloCep(@PathVariable String cep){
+       return repository.findByCepLike(cep)
+               .map(endereco -> {
+                   EnderecoResponseDTO.converter(endereco);
+                   return endereco;
+               }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
 
-    @PutMapping("/atualizar/{id}")
-    public ResponseEntity<Endereco>atualizar(@PathVariable("id")Long id, @RequestBody Endereco novo){
-        if (service.atualizar(id, novo)) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        }else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
-    @GetMapping("busca/{id}")
-    public ResponseEntity<Endereco> busca(@PathVariable("id") Long id){
-        Optional<Endereco>procurado = service.buscaPorId(id);
-        if (procurado.isPresent()){
-            return new ResponseEntity<Endereco>(procurado.get(), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+   @GetMapping("/busca-logradouro/{logradouro}")
+   @ResponseBody
+   public Endereco buscaPeloLogradouro(@PathVariable String logradouro){
+       return repository.findByLogradouroLike(logradouro)
+               .map(endereco -> {
+                   EnderecoResponseDTO.converter(endereco);
+                   return endereco;
+               }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
+
+
+   @ResponseStatus(HttpStatus.NO_CONTENT)
+   @PutMapping("/atualizar/{id}")
+   public void atualizar(@RequestBody EnderecoRequestDTO dto, @PathVariable Long id){
+        repository.findById(id)
+        .map(endereco -> {
+            endereco.setCep(dto.getCep());
+            endereco.setLogradouro(dto.getLogradouro());
+            endereco.setNumero(dto.getNumero());
+            endereco.setCidade(dto.getCidade());
+            endereco.setEstado(dto.getEstado());
+            repository.save(endereco);
+            return Void.TYPE;
+        }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+   }
+
+
+   @GetMapping("/lista")
+   public List<EnderecoResponseDTO>lista(){
+       List<EnderecoResponseDTO>listaTodos = new ArrayList<>();
+       repository.findAll()
+               .stream()
+               .forEach(endereco -> {
+                   listaTodos.add(EnderecoResponseDTO.converter(endereco));
+               });
+       return listaTodos;
+   }
+
+   @DeleteMapping("/deletar/{id}")
+   @ResponseStatus(HttpStatus.NO_CONTENT)
+   public void deletar(@PathVariable Long id){
+       repository.findById(id)
+               .map(endereco -> {
+                   repository.deleteById(id);
+                   return Void.TYPE;
+               }).orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND)));
+   }
+
 }
