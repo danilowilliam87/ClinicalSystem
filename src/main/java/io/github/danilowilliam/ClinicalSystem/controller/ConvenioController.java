@@ -82,6 +82,16 @@ public class ConvenioController {
         return repository.save(requestDTO.converter());
     }
 
+    @GetMapping("/busca-por-nome/{nome}")
+    @ResponseBody
+    public Convenio buscarPorNome(@PathVariable String nome){
+        return repository.findByNomeLike(nome)
+                .map(convenio -> {
+                    ConvenioResponseDTO.converter(convenio);
+                    return convenio;
+                }).orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
 
 
 }
