@@ -1,1 +1,0 @@
-ALTER TABLE consulta ADD CONSTRAINT fk_consulta_dependente FOREIGN KEY(dependente_id) REFERENCES dependente(id);

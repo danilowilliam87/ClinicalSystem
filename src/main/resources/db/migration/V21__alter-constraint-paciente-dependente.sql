@@ -1,1 +1,0 @@
-ALTER TABLE dependente ADD CONSTRAINT fk_paciente_dependente FOREIGN KEY(paciente_id) REFERENCES paciente(id);

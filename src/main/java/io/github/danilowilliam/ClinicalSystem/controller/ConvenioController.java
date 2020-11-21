@@ -51,7 +51,7 @@ public class ConvenioController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));  //caso contrário...retornará uma exceção
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/alterar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void alterar(@PathVariable Long id,@RequestBody ConvenioRequestDTO convenioAtualizado){
         repository

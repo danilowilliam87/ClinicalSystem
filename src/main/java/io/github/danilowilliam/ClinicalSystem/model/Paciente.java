@@ -18,7 +18,7 @@ public class Paciente {
     private Long id;
     @Column(nullable = false)
     private String nome;
-    @Column(nullable = false)
+    @Column(nullable = true)
     private String email;
     @Column(nullable = false)
     private String cpf;
@@ -28,17 +28,15 @@ public class Paciente {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = false)
     @JoinColumn(name = "convenio_id")
     private Convenio convenio;
 
-    @OneToMany(mappedBy = "paciente")
-    private List<Dependente>dependentes;
 
     @OneToMany(mappedBy = "paciente")
     private List<Consulta>consultas;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
     @JoinColumn(name = "endereco_id")
     private Endereco endereco;
 

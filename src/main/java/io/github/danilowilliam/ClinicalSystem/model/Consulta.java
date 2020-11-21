@@ -22,8 +22,6 @@ public class Consulta {
     private Paciente paciente;
     @ManyToOne
     private Funcionario funcionario;
-    @ManyToOne
-    private Dependente dependente;
     private Double valor;
     @Column(name = "forma_pagamento")
     private String formaPagamento;
@@ -45,10 +43,9 @@ public class Consulta {
         this.informacoesAdicionais = informacoesAdicionais;
     }
 
-    public Consulta(Long id, Medico medico, Dependente dependente, LocalDate dataConsulta, String informacoesAdicionais){
+    public Consulta(Long id, Medico medico,  LocalDate dataConsulta, String informacoesAdicionais){
         this.id = id;
         this.medico = medico;
-        this.dependente = dependente;
         this.dataConsulta = dataConsulta;
         this.informacoesAdicionais = informacoesAdicionais;
     }

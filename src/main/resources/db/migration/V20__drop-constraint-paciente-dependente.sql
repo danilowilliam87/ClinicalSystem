@@ -1,1 +1,0 @@
-alter table dependente drop constraint fk_paciente_dependente;
