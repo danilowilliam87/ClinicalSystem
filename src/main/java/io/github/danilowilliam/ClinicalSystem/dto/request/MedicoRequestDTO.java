@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MedicoRequestDTO {
+    private Long id;
     private String nome;
     private String cpf;
     private String crm;

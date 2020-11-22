@@ -20,7 +20,7 @@ public class Medico {
     private String cpf;
     private String crm;
     private String senha;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Especialidade especialidade;
 
     @OneToMany(mappedBy = "medico")

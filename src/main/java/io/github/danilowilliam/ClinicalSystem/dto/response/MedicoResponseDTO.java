@@ -14,7 +14,7 @@ public class MedicoResponseDTO {
     private String crm;
     private String especialidade;
 
-    private static MedicoResponseDTO converter(Medico medico){
+    public static MedicoResponseDTO converter(Medico medico){
         return new MedicoResponseDTO(medico.getId(),medico.getNome(),
                                      medico.getCrm(),
                                       medico.getEspecialidade().getNome());
