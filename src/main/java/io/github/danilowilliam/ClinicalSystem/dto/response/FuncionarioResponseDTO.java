@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class FuncionarioResponseDTO {
     private Long id;
@@ -14,12 +13,12 @@ public class FuncionarioResponseDTO {
     private String cpf;
     private String email;
     private String matricula;
-    private String senha;
     private String perfil;
 
     public FuncionarioResponseDTO(Long id,String nome,String cpf,String email,String matricula,String perfil){
         this.id = id;
         this.nome = nome;
+        this.email = email;
         this.cpf = cpf;
         this.matricula = matricula;
         this.perfil = perfil;
