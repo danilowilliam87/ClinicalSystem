@@ -41,13 +41,14 @@ public class Paciente {
     private Endereco endereco;
 
 
-    public Paciente(String nome,String email,String cpf,String telefone,LocalDate dataNascimento,Endereco endereco){
+    public Paciente(String nome,String email,String cpf,String telefone,LocalDate dataNascimento,Endereco endereco,Convenio convenio){
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
         this.telefone = telefone;
         this.dataNascimento = dataNascimento;
         this.endereco = endereco;
+        this.convenio = convenio;
     }
 
 }

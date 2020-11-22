@@ -10,4 +10,5 @@ import java.util.Optional;
 public interface PacienteRepository extends JpaRepository<Paciente, Long> {
 
     public Optional<Paciente>findByNomeLike(String nome);
+    public Optional<Paciente>findByCpfLike(String cpf);
 }
