@@ -23,7 +23,7 @@ public class Medico {
     @OneToOne(cascade = CascadeType.ALL)
     private Especialidade especialidade;
 
-    @OneToMany(mappedBy = "medico")
+    @OneToMany(mappedBy = "medico",orphanRemoval = false)
     private List<Consulta>consultas;
 
     public Medico(List<Consulta>consultas){

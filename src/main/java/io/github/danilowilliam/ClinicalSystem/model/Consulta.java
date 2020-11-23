@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,11 +17,11 @@ public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Medico medico;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Paciente paciente;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Funcionario funcionario;
     private Double valor;
     @Column(name = "forma_pagamento")
@@ -62,7 +63,23 @@ public class Consulta {
     }
 
     public Consulta(){
+    }
 
+    public Consulta(Medico medico, Funcionario funcionario,
+                    Paciente paciente, Double valor,
+                    String formaPagamento,
+                    String informacoesAdicionais,
+                    String situacao, LocalDate dataMarcacao,
+                    LocalDate dataConsulta){
+        this.medico = medico;
+        this.funcionario = funcionario;
+        this.paciente = paciente;
+        this.valor = valor;
+        this.formaPagamento = formaPagamento;
+        this.informacoesAdicionais = informacoesAdicionais;
+        this.situacao = situacao;
+        this.dataMarcacao = dataMarcacao;
+        this.dataConsulta = dataConsulta;
     }
 
 }

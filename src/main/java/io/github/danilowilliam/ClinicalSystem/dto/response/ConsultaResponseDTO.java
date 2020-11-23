@@ -9,15 +9,15 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ConsultaPacienteResponseDTO {
+public class ConsultaResponseDTO {
     private Long id;
     private String nomeMedico;
     private String nomePaciente;
     private LocalDate dataConsulta;
     private String informacoesAdicionais;
 
-    public static ConsultaPacienteResponseDTO converter(Consulta consulta){
-        return new ConsultaPacienteResponseDTO(consulta.getId(),
+    public static ConsultaResponseDTO converter(Consulta consulta){
+        return new ConsultaResponseDTO(consulta.getId(),
                 consulta.getMedico().getNome(),
                 consulta.getPaciente().getNome(),
                 consulta.getDataConsulta(),

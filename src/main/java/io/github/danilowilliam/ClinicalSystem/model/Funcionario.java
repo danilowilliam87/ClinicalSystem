@@ -23,7 +23,7 @@ public class Funcionario {
     private String senha;
     private String perfil;
 
-    @OneToMany(mappedBy = "funcionario")
+    @OneToMany(mappedBy = "funcionario",orphanRemoval = false)
     private List<Consulta>consultas;
     public Funcionario(String nome,String cpf,String email,String matricula,String senha){
         this.nome = nome;

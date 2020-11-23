@@ -33,7 +33,7 @@ public class Paciente {
     private Convenio convenio;
 
 
-    @OneToMany(mappedBy = "paciente")
+    @OneToMany(mappedBy = "paciente",orphanRemoval = false)
     private List<Consulta>consultas;
 
     @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
