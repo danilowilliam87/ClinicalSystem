@@ -3,15 +3,18 @@ package io.github.danilowilliam.ClinicalSystem.controller;
 import io.github.danilowilliam.ClinicalSystem.dto.request.ConsultaRequestDTO;
 import io.github.danilowilliam.ClinicalSystem.dto.response.ConsultaResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Consulta;
+import io.github.danilowilliam.ClinicalSystem.model.StatusConsulta;
 import io.github.danilowilliam.ClinicalSystem.repository.ConsultaRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.FuncionarioRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.MedicoRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.PacienteRepository;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,6 +61,10 @@ public class ConsultaController {
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         //depois de setados todos os objetos na consulta...salvar a consulta
+        consulta.setSituacao(StatusConsulta.EM_ESPERA);
+        LocalDate hoje = LocalDate.now();
+        //data da marcação será gravada no momento que a consulta for salva
+        consulta.setDataMarcacao(hoje);
         Consulta marcada = repository.save(consulta);
         return ConsultaResponseDTO.converter(marcada);
     }
@@ -85,12 +92,12 @@ public class ConsultaController {
         return listaTodos;
     }
 
-    @GetMapping("/consultas-medico/{crm}")
+    @GetMapping("/consultas-medico/{crm}/{dataConsulta}")
     @ResponseBody
-    public List<ConsultaResponseDTO> listaDeConsultaPorMedico(@PathVariable String crm){
+    public List<ConsultaResponseDTO> listaDeConsultaPorMedico(@PathVariable String crm, @PathVariable("dataConsulta")LocalDate dataConsulta){
         List<ConsultaResponseDTO>lista = new ArrayList<>();
         repository
-                .findConsultaByMedico(crm)
+                .buscarPorMedicoData(crm,dataConsulta)
                 .stream()
                 .forEach(consulta -> {
                     lista.add(ConsultaResponseDTO.converter(consulta));
@@ -112,5 +119,61 @@ public class ConsultaController {
         return lista;
     }
 
+    @PutMapping("/abrir-consulta")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void abrirConsulta(@RequestBody Consulta consulta){
+        repository
+                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .map(consulta1 -> {
+                    consulta1.setId(consulta.getId());
+                    consulta1.setSituacao(StatusConsulta.ABERTA);
+                    repository.save(consulta1);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    @PutMapping("/finalizar-consulta")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void finalizarConsulta(Consulta consulta){
+        repository
+                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .map(consulta1 -> {
+                    consulta1 = consulta;
+                    consulta1.setSituacao(StatusConsulta.FINALIZADA);
+                    repository.save(consulta1);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+    }
+
+    @PutMapping("/cancelar-consulta")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void cancelarConsulta(Consulta consulta){
+        repository
+                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .map(consulta1 -> {
+                    consulta1 = consulta;
+                    consulta1.setSituacao(StatusConsulta.CANCELADA);
+                    repository.save(consulta1);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+    }
+
+    @GetMapping("/consulta-atual/{crm}")
+    @ResponseBody
+    public List<ConsultaResponseDTO>consultasDataAtual(@PathVariable("crm") String crm){
+        //consultas do dia para ser carregada na tela do médico
+        LocalDate hoje = LocalDate.now();
+        List<ConsultaResponseDTO>lista = new ArrayList<>();
+        //adicionar consultas na lista
+        repository
+                .buscarPorMedicoData(crm,hoje)
+                .stream()
+                .forEach(consulta -> {
+                    lista.add(ConsultaResponseDTO.converter(consulta));
+                });
+        return lista;
+    }
 
 }

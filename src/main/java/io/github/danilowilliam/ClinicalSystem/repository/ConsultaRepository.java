@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
@@ -32,4 +33,10 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     //query que retorna uma lista de consultas médicas de acordo com o médico e a data
     @Query("from Consulta c where c.paciente.cpf =: cpf and c.dataConsulta =: dataConsulta")
     public List<Consulta>buscarPorMedicoData(@Param("cpf") String cpf, @Param("dataConsulta") LocalDate dataConsulta);
+
+    //busca consulta do paciente em uma data específica
+    public Optional<Consulta> findByCpfLikeAndDataConsultaLike(String cpf, LocalDate dataConsulta);
+
+
+
 }

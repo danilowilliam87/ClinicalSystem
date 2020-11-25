@@ -17,21 +17,31 @@ public class Consulta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Medico medico;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Paciente paciente;
+
     @ManyToOne(cascade = CascadeType.ALL)
     private Funcionario funcionario;
+
     private Double valor;
+
     @Column(name = "forma_pagamento")
     private String formaPagamento;
+
     @Column(name = "informacoes_adicionais")
     private String informacoesAdicionais;
-    private String situacao;
+
+    @Enumerated(EnumType.STRING)
+    private StatusConsulta situacao;
+
     @Column(name = "data_marcacao",updatable = false)
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataMarcacao;
+
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
 
@@ -54,7 +64,7 @@ public class Consulta {
     public Consulta(String formaPagamento,
                     String informacoesAdicionais,
                     LocalDate dataConsulta,
-                    String situacao){
+                    StatusConsulta situacao){
         this.formaPagamento = formaPagamento;
         this.informacoesAdicionais = informacoesAdicionais;
         this.dataConsulta = dataConsulta;
@@ -69,7 +79,7 @@ public class Consulta {
                     Paciente paciente, Double valor,
                     String formaPagamento,
                     String informacoesAdicionais,
-                    String situacao, LocalDate dataMarcacao,
+                    StatusConsulta situacao, LocalDate dataMarcacao,
                     LocalDate dataConsulta){
         this.medico = medico;
         this.funcionario = funcionario;
