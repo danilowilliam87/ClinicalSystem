@@ -5,7 +5,7 @@ CREATE TABLE consulta(
     funcionario_id INT NOT NULL,
     valor float NOT NULL,
     forma_pagamento VARCHAR(30),
-    informacoes_adicionais BLOB,
+    informacoes_adicionais VARCHAR(255),
     situacao VARCHAR(30) NOT NULL,
     data_marcacao DATE NOT NULL,
     data_consulta DATE NOT NULL);

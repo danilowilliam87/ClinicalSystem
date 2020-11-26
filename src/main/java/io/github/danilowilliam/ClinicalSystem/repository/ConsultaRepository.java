@@ -20,7 +20,8 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     @Query("from Consulta c where c.dataConsulta =: dataConsulta")
     public Consulta findByData(@Param("dataConsulta")LocalDate dataConsulta);
 
-    public List<Consulta>findByDataLike(LocalDate dataConsulta);
+    @Query("from Consulta c where c.dataConsulta =: dataConsulta")
+    public List<Consulta>buscaPorData(@Param("dataConsulta") LocalDate dataConsulta);
 
     //retorna uma lista de consultas de um determinado paciente
     @Query("from Consulta c where c.paciente.cpf =: cpf")
@@ -31,11 +32,11 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     public List<Consulta>buscaPorFuncionario(@Param("cpf") String cpf);
 
     //query que retorna uma lista de consultas médicas de acordo com o médico e a data
-    @Query("from Consulta c where c.paciente.cpf =: cpf and c.dataConsulta =: dataConsulta")
+    @Query("from Consulta c where c.medico.cpf =: cpf and c.dataConsulta =: dataConsulta")
     public List<Consulta>buscarPorMedicoData(@Param("cpf") String cpf, @Param("dataConsulta") LocalDate dataConsulta);
 
-    //busca consulta do paciente em uma data específica
-    public Optional<Consulta> findByCpfLikeAndDataConsultaLike(String cpf, LocalDate dataConsulta);
+    @Query("from Consulta c where c.paciente.cpf =: cpf and c.dataConsulta =: dataConsulta")
+    public Optional<Consulta>buscaPorPacienteData(String cpf, LocalDate data);
 
 
 

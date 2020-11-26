@@ -43,7 +43,7 @@ public class ConsultaController {
                 .map(paciente -> {
                           consulta.setPaciente(paciente);
                           return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,"paciente não encontrado"));
 
         //realizar a busca do médico no BD
         medicoRepository.findByCrmLike(consulta.getMedico().getCrm())
@@ -123,7 +123,7 @@ public class ConsultaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void abrirConsulta(@RequestBody Consulta consulta){
         repository
-                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
                     consulta1.setId(consulta.getId());
                     consulta1.setSituacao(StatusConsulta.ABERTA);
@@ -136,7 +136,7 @@ public class ConsultaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void finalizarConsulta(Consulta consulta){
         repository
-                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
                     consulta1 = consulta;
                     consulta1.setSituacao(StatusConsulta.FINALIZADA);
@@ -150,7 +150,7 @@ public class ConsultaController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void cancelarConsulta(Consulta consulta){
         repository
-                .findByCpfLikeAndDataConsultaLike(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
+                .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
                     consulta1 = consulta;
                     consulta1.setSituacao(StatusConsulta.CANCELADA);
