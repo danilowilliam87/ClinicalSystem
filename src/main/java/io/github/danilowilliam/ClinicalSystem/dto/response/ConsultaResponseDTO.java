@@ -15,12 +15,15 @@ public class ConsultaResponseDTO {
     private String nomePaciente;
     private LocalDate dataConsulta;
     private String informacoesAdicionais;
+    private String situacao;
+
 
     public static ConsultaResponseDTO converter(Consulta consulta){
         return new ConsultaResponseDTO(consulta.getId(),
                 consulta.getMedico().getNome(),
                 consulta.getPaciente().getNome(),
                 consulta.getDataConsulta(),
-                consulta.getInformacoesAdicionais());
+                consulta.getInformacoesAdicionais(),
+                consulta.getSituacao().toString());
     }
 }
