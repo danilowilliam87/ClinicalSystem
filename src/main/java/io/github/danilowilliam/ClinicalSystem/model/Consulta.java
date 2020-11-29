@@ -42,6 +42,7 @@ public class Consulta {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private LocalDate dataMarcacao;
 
+
     @Column(name = "data_consulta")
     private LocalDate dataConsulta;
 

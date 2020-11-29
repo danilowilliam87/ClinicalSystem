@@ -10,6 +10,7 @@ import io.github.danilowilliam.ClinicalSystem.repository.MedicoRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.PacienteRepository;
 import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -92,9 +93,9 @@ public class ConsultaController {
         return listaTodos;
     }
 
-    @GetMapping("/consultas-medico/{crm}/{dataConsulta}")
+    @GetMapping("/consultas-medico/")
     @ResponseBody
-    public List<ConsultaResponseDTO> listaDeConsultaPorMedico(@PathVariable String crm, @PathVariable("dataConsulta")LocalDate dataConsulta){
+    public List<ConsultaResponseDTO> listaDeConsultaPorMedico(@RequestParam(required = true) String crm, @RequestParam("dataConsulta") LocalDate dataConsulta){
         List<ConsultaResponseDTO>lista = new ArrayList<>();
         repository
                 .buscarPorMedicoData(crm,dataConsulta)
@@ -134,7 +135,7 @@ public class ConsultaController {
 
     @PutMapping("/finalizar-consulta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void finalizarConsulta(Consulta consulta){
+    public void finalizarConsulta(@RequestBody Consulta consulta){
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
@@ -176,4 +177,27 @@ public class ConsultaController {
         return lista;
     }
 
+    @GetMapping("/{crm}")
+    @ResponseBody
+    public List<ConsultaResponseDTO> consultaPorMedico(@PathVariable String crm){
+        List<ConsultaResponseDTO>lista = new ArrayList<>();
+        repository
+                .findConsultaByMedico(crm)
+                .stream()
+                .forEach(consulta -> {
+                    lista.add(ConsultaResponseDTO.converter(consulta));
+                });
+
+        return lista;
+    }
+
+    @GetMapping("/data")
+    @ResponseBody
+    public ConsultaResponseDTO consultaDatas(@RequestParam("dataConsulta") @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dataConsulta){
+        return repository
+                .findByData(dataConsulta)
+                .map(consulta -> {
+                    return ConsultaResponseDTO.converter(consulta);
+                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
 }
