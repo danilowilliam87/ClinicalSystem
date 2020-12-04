@@ -139,9 +139,9 @@ public class ConsultaController {
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
-                    consulta1 = consulta;
-                    consulta1.setSituacao(StatusConsulta.FINALIZADA);
-                    repository.save(consulta1);
+                    consulta.setId(consulta1.getId());
+                    consulta.setSituacao(StatusConsulta.FINALIZADA);
+                    repository.save(consulta);
                     return Void.TYPE;
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -153,9 +153,9 @@ public class ConsultaController {
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
-                    consulta1 = consulta;
-                    consulta1.setSituacao(StatusConsulta.CANCELADA);
-                    repository.save(consulta1);
+                    consulta.setId(consulta1.getId());
+                    consulta.setSituacao(StatusConsulta.CANCELADA);
+                    repository.save(consulta);
                     return Void.TYPE;
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
