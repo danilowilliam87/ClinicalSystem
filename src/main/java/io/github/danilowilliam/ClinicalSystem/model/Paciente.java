@@ -28,17 +28,17 @@ public class Paciente {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dataNascimento;
 
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = false)
-    @JoinColumn(name = "convenio_id")
+    @OneToOne
     private Convenio convenio;
+
 
 
     @OneToMany(mappedBy = "paciente",orphanRemoval = false)
     private List<Consulta>consultas;
 
-    @OneToOne(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name = "endereco_id")
+    @OneToOne
     private Endereco endereco;
+
 
 
     public Paciente(String nome,String email,String cpf,String telefone,LocalDate dataNascimento,Endereco endereco,Convenio convenio){

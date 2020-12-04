@@ -3,6 +3,8 @@ package io.github.danilowilliam.ClinicalSystem.controller;
 import io.github.danilowilliam.ClinicalSystem.dto.request.PacienteRequestDTO;
 import io.github.danilowilliam.ClinicalSystem.dto.response.PacienteResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Paciente;
+import io.github.danilowilliam.ClinicalSystem.repository.ConvenioRepository;
+import io.github.danilowilliam.ClinicalSystem.repository.EnderecoRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,9 +21,31 @@ public class PacienteController {
     @Autowired
     private PacienteRepository repository;
 
+    @Autowired
+    private EnderecoRepository enderecoRepository;
+
+    @Autowired
+    private ConvenioRepository convenioRepository;
+
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
     public PacienteResponseDTO salvar(@RequestBody PacienteRequestDTO dto){
+        //busca endereço para vincular ao paciente
+        enderecoRepository
+                .findByCepLike(dto.getEndereco().getCep())
+                .map(endereco -> {
+                    dto.setEndereco(endereco);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        //busca convênio para vincular ao paciente
+        convenioRepository
+                .findByNomeLike(dto.getConvenio().getNome())
+                .map(convenio -> {
+                    dto.setConvenio(convenio);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
         Paciente paciente = repository.save(dto.converter());
         return PacienteResponseDTO.converter(paciente);
     }
