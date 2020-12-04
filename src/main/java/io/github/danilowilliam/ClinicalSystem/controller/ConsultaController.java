@@ -126,9 +126,9 @@ public class ConsultaController {
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
-                    consulta1.setId(consulta.getId());
-                    consulta1.setSituacao(StatusConsulta.ABERTA);
-                    repository.save(consulta1);
+                    consulta.setId(consulta1.getId());
+                    consulta.setSituacao(StatusConsulta.ABERTA);
+                    repository.save(consulta);
                     return Void.TYPE;
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
@@ -149,7 +149,7 @@ public class ConsultaController {
 
     @PutMapping("/cancelar-consulta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelarConsulta(Consulta consulta){
+    public void cancelarConsulta(@RequestBody Consulta consulta){
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {

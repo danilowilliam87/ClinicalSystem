@@ -35,8 +35,9 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     @Query("from Consulta c where c.medico.crm=:crm and c.dataConsulta=:dataConsulta")
     public List<Consulta>buscarPorMedicoData(@Param("crm") String crm, @Param("dataConsulta") LocalDate dataConsulta);
 
-    @Query("from Consulta c where c.paciente.cpf =: cpf and c.dataConsulta =: dataConsulta")
-    public Optional<Consulta>buscaPorPacienteData(String cpf, LocalDate data);
+    //o documento refere se ao cpf, mudança devido ao erro na execução do método
+    @Query("from Consulta c where c.paciente.cpf =:documento and c.dataConsulta =:data")
+    public Optional<Consulta>buscaPorPacienteData(@Param("documento") String documento, @Param("data") LocalDate data);
 
 
 
