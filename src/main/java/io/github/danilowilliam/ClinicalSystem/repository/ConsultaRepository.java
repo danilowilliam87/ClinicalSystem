@@ -39,6 +39,8 @@ public interface ConsultaRepository extends JpaRepository<Consulta, Long> {
     @Query("from Consulta c where c.paciente.cpf =:documento and c.dataConsulta =:data")
     public Optional<Consulta>buscaPorPacienteData(@Param("documento") String documento, @Param("data") LocalDate data);
 
-
+    //retornar todas as consultas de uma data qualquer
+    @Query("from Consulta c where c.dataConsulta =:data")
+    public List<Consulta>findAllByData(@Param("data") LocalDate data);
 
 }

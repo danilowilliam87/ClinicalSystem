@@ -193,11 +193,14 @@ public class ConsultaController {
 
     @GetMapping("/data")
     @ResponseBody
-    public ConsultaResponseDTO consultaDatas(@RequestParam("dataConsulta") @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dataConsulta){
-        return repository
-                .findByData(dataConsulta)
-                .map(consulta -> {
-                    return ConsultaResponseDTO.converter(consulta);
-                }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public List<ConsultaResponseDTO> consultaDatas(@RequestParam("data_consulta") @DateTimeFormat(pattern = "yyyy/MM/dd") LocalDate dataConsulta){
+        List<ConsultaResponseDTO>lista = new ArrayList<>();
+        repository.
+                findAllByData(dataConsulta)
+                .stream()
+                .forEach(consulta -> {
+                    lista.add(ConsultaResponseDTO.converter(consulta));
+                });
+        return lista;
     }
 }
