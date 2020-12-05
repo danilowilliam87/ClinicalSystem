@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class PacienteController {
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
-    public PacienteResponseDTO salvar(@RequestBody PacienteRequestDTO dto){
+    public PacienteResponseDTO salvar(@RequestBody @Valid PacienteRequestDTO dto){
         //busca endereço para vincular ao paciente
         enderecoRepository
                 .findByCepLike(dto.getEndereco().getCep())
@@ -98,7 +99,7 @@ public class PacienteController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void  atualizar(@RequestBody PacienteRequestDTO dto, @PathVariable Long id){
+    public void  atualizar(@RequestBody @Valid PacienteRequestDTO dto, @PathVariable Long id){
         repository
                 .findById(id)
                 .map(paciente ->  {

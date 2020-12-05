@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.lang.module.ResolutionException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,7 +54,7 @@ public class ConvenioController {
 
     @PutMapping("/alterar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void alterar(@PathVariable Long id,@RequestBody ConvenioRequestDTO convenioAtualizado){
+    public void alterar(@PathVariable Long id,@RequestBody @Valid ConvenioRequestDTO convenioAtualizado){
         repository
                 .findById(id)  //busca o convenio
                 .map(convenio -> {  //se encontrar...atualizará
@@ -78,7 +79,7 @@ public class ConvenioController {
 
     @ResponseBody
     @PostMapping("/salvar")
-    public Convenio salvar(@RequestBody ConvenioRequestDTO requestDTO){
+    public Convenio salvar(@RequestBody @Valid ConvenioRequestDTO requestDTO){
         return repository.save(requestDTO.converter());
     }
 

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +22,7 @@ public class EspecialidadeController {
 
     @ResponseBody
     @PostMapping("/salvar")
-    public Especialidade salvar(@RequestBody Especialidade especialidade){
+    public Especialidade salvar(@RequestBody @Valid Especialidade especialidade){
         return repository.save(especialidade);
     }
 
@@ -49,7 +50,7 @@ public class EspecialidadeController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Long id, @RequestBody Especialidade especialidadeatualizada){
+    public void atualizar(@PathVariable Long id, @RequestBody @Valid Especialidade especialidadeatualizada){
         repository
                 .findById(id)
                 .map(especialidade1 -> {

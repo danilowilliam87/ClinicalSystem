@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class MedicoController {
 
     @PostMapping("/salvar")
     @ResponseBody
-    public MedicoResponseDTO salvar(@RequestBody MedicoRequestDTO medicoRequestDTO){
+    public MedicoResponseDTO salvar(@RequestBody @Valid MedicoRequestDTO medicoRequestDTO){
         Medico medico =  repository.save(medicoRequestDTO.converter());
         return MedicoResponseDTO.converter(medico);
     }
@@ -62,7 +63,7 @@ public class MedicoController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@RequestBody MedicoRequestDTO dto, @PathVariable Long id){
+    public void atualizar(@RequestBody @Valid MedicoRequestDTO dto, @PathVariable Long id){
         repository
                 .findById(id)
                 .map(medico -> {

@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ConsultaController {
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
-    public ConsultaResponseDTO salvar(@RequestBody Consulta consulta){
+    public ConsultaResponseDTO salvar(@RequestBody @Valid Consulta consulta){
         //realizar a busca do paciente no BD
         pacienteRepository.findByCpfLike(consulta.getPaciente().getCpf())
                 .map(paciente -> {
@@ -122,7 +123,7 @@ public class ConsultaController {
 
     @PutMapping("/abrir-consulta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void abrirConsulta(@RequestBody Consulta consulta){
+    public void abrirConsulta(@RequestBody @Valid Consulta consulta){
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
@@ -135,7 +136,7 @@ public class ConsultaController {
 
     @PutMapping("/finalizar-consulta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void finalizarConsulta(@RequestBody Consulta consulta){
+    public void finalizarConsulta(@RequestBody @Valid Consulta consulta){
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {
@@ -149,7 +150,7 @@ public class ConsultaController {
 
     @PutMapping("/cancelar-consulta")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void cancelarConsulta(@RequestBody Consulta consulta){
+    public void cancelarConsulta(@RequestBody @Valid Consulta consulta){
         repository
                 .buscaPorPacienteData(consulta.getPaciente().getCpf(),consulta.getDataConsulta())
                 .map(consulta1 -> {

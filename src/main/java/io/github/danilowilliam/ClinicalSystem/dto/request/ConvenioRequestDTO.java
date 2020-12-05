@@ -11,7 +11,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ConvenioRequestDTO {
+    @NotBlank
     private String nome;
+    @NotBlank
     private String tipo;
 
    public Convenio converter(){

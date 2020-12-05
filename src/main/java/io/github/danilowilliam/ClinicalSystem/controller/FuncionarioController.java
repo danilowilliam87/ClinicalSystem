@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class FuncionarioController {
 
     @PostMapping("/salvar")
     @ResponseStatus(HttpStatus.CREATED)
-    public FuncionarioResponseDTO salvar(@RequestBody FuncionarioRequestDTO dto){
+    public FuncionarioResponseDTO salvar(@RequestBody @Valid FuncionarioRequestDTO dto){
         Funcionario funcionario = repository.save(dto.converter());
         return  FuncionarioResponseDTO.converter(funcionario);
     }
@@ -67,7 +68,7 @@ public class FuncionarioController {
 
     @PutMapping("/atualizar/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@RequestBody FuncionarioRequestDTO dto,@PathVariable Long id){
+    public void atualizar(@RequestBody @Valid FuncionarioRequestDTO dto,@PathVariable Long id){
         repository
                 .findById(id)
                 .map(funcionario -> {

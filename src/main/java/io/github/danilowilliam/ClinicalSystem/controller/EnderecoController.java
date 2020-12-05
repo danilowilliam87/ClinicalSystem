@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +25,7 @@ public class EnderecoController {
 
    @PostMapping("/salvar")
    @ResponseBody
-   public Endereco salvar(@RequestBody EnderecoRequestDTO endereco){
+   public Endereco salvar(@RequestBody @Valid EnderecoRequestDTO endereco){
        return repository.save(endereco.converter());
    }
 
@@ -62,7 +63,7 @@ public class EnderecoController {
 
    @ResponseStatus(HttpStatus.NO_CONTENT)
    @PutMapping("/atualizar/{id}")
-   public void atualizar(@RequestBody EnderecoRequestDTO dto, @PathVariable Long id){
+   public void atualizar(@RequestBody @Valid EnderecoRequestDTO dto, @PathVariable Long id){
         repository.findById(id)
         .map(endereco -> {
             endereco.setCep(dto.getCep());

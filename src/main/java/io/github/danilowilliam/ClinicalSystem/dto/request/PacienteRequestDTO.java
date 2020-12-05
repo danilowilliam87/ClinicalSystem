@@ -7,15 +7,20 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacienteRequestDTO {
+    @NotBlank
     private String nome;
+    @NotBlank
     private String email;
+    @NotBlank
     private String cpf;
+    @NotBlank
     private String telefone;
     private Endereco endereco;
     private LocalDate dataNascimento;
