@@ -8,5 +8,6 @@ import java.util.Optional;
 
 @Repository
 public interface ConvenioRepository extends JpaRepository<Convenio, Long> {
-  public Optional<Convenio>findByNomeLike(String nome);
+    public Optional<Convenio> findByNomeLike(String nome);
+
 }

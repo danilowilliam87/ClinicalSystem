@@ -1,4 +1,4 @@
-package io.github.danilowilliam.ClinicalSystem.service;
+package io.github.danilowilliam.ClinicalSystem.services;
 
 import io.github.danilowilliam.ClinicalSystem.model.Medico;
 import io.github.danilowilliam.ClinicalSystem.repository.MedicoRepository;

@@ -1,4 +1,4 @@
-package io.github.danilowilliam.ClinicalSystem.service;
+package io.github.danilowilliam.ClinicalSystem.services;
 
 import io.github.danilowilliam.ClinicalSystem.repository.ConsultaRepository;
 import org.springframework.beans.factory.annotation.Autowired;

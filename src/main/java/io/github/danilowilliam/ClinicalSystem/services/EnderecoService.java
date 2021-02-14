@@ -1,4 +1,4 @@
-package io.github.danilowilliam.ClinicalSystem.service;
+package io.github.danilowilliam.ClinicalSystem.services;
 
 import io.github.danilowilliam.ClinicalSystem.model.Endereco;
 import io.github.danilowilliam.ClinicalSystem.repository.EnderecoRepository;
@@ -14,21 +14,21 @@ public class EnderecoService {
     @Autowired
     private EnderecoRepository repository;
 
-    public List<Endereco>listarTodos(){
+    public List<Endereco> listarTodos() {
         return repository.findAll();
     }
 
-    public Optional<Endereco>buscaPorId(Long id){
+    public Optional<Endereco> buscaPorId(Long id) {
         return repository.findById(id);
     }
 
-    public Endereco salvar(Endereco endereco){
+    public Endereco salvar(Endereco endereco) {
         return repository.save(endereco);
     }
 
-    public boolean atualizar(Long id, Endereco endereco){
+    public boolean atualizar(Long id, Endereco endereco) {
         Optional<Endereco> antigo = repository.findById(id);
-        if(antigo.isPresent()){
+        if (antigo.isPresent()) {
             Endereco novo = antigo.get();
             novo.setCep(endereco.getCep());
             novo.setLogradouro(endereco.getLogradouro());
@@ -42,9 +42,9 @@ public class EnderecoService {
         }
     }
 
-    public boolean deletar(Long id){
-        Optional<Endereco>endereco = repository.findById(id);
-        if(endereco.isPresent()){
+    public boolean deletar(Long id) {
+        Optional<Endereco> endereco = repository.findById(id);
+        if (endereco.isPresent()) {
             repository.deleteById(id);
             return true;
         } else {

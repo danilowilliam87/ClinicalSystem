@@ -4,6 +4,7 @@ import io.github.danilowilliam.ClinicalSystem.model.Funcionario;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -12,16 +13,17 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FuncionarioRequestDTO {
-    @NotBlank
+    @NotBlank(message = "{campo.nome.obrigatorio}")
     private String nome;
-    @NotBlank
+    @NotBlank(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.valido}")
     private String cpf;
-    @NotBlank
-    @Email
+    @NotBlank(message = "{campo.email.obrigatorio}")
+    @Email(message = "{campo.email.valido}")
     private String email;
     //criar função para gerar matrícula automaticamente
     private String matricula;
-    @NotBlank
+    @NotBlank(message = "{campo.senha.obrigatorio}")
     private String senha;
     private String perfil;
 

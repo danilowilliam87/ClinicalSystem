@@ -6,7 +6,9 @@ import io.github.danilowilliam.ClinicalSystem.model.Paciente;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 
@@ -14,15 +16,18 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PacienteRequestDTO {
-    @NotBlank
+    @NotBlank(message = "{campo.nome.obrigatorio}")
     private String nome;
-    @NotBlank
+    @NotBlank(message = "{campo.email.obrigatorio}")
+    @Email(message = "{campo.email.valido}")
     private String email;
-    @NotBlank
+    @NotBlank(message = "{campo.cpf.obrigatorio}")
+    @CPF(message = "{campo.cpf.valido}")
     private String cpf;
-    @NotBlank
+    @NotBlank(message = "{campo.telefone.obrigatorio}")
     private String telefone;
     private Endereco endereco;
+    @NotBlank(message = "{campo.datanascimento.obrigatorio}")
     private LocalDate dataNascimento;
     private Convenio convenio;
 

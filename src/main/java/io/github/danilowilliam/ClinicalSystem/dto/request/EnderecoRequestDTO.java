@@ -11,15 +11,15 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @Data
 public class EnderecoRequestDTO {
-    @NotBlank
+    @NotBlank(message = "{campo.cep.obrigatorio}")
     private String cep;
-    @NotBlank
+    @NotBlank(message = "{campo.logradouro.obrigatorio}")
     private String logradouro;
-    @NotBlank
+
     private int numero;
-    @NotBlank
+    @NotBlank(message = "{campo.cidade.obrigatorio}")
     private String cidade;
-    @NotBlank
+    @NotBlank(message = "{campo.estado.obrigatorio}")
     private String estado;
 
     public Endereco converter(){

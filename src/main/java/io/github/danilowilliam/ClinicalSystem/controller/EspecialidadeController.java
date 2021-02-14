@@ -2,16 +2,13 @@ package io.github.danilowilliam.ClinicalSystem.controller;
 
 import io.github.danilowilliam.ClinicalSystem.model.Especialidade;
 import io.github.danilowilliam.ClinicalSystem.repository.EspecialidadeRepository;
-import io.github.danilowilliam.ClinicalSystem.service.EspecialidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/especialidade")
