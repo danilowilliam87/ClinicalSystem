@@ -2,6 +2,7 @@ package io.github.danilowilliam.ClinicalSystem.controller;
 
 import io.github.danilowilliam.ClinicalSystem.model.Especialidade;
 import io.github.danilowilliam.ClinicalSystem.repository.EspecialidadeRepository;
+import io.github.danilowilliam.ClinicalSystem.services.EspecialidadeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -11,61 +12,46 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
-@RequestMapping("/especialidade")
+@RequestMapping("/especialidades")
 public class EspecialidadeController {
 
     @Autowired
-    private EspecialidadeRepository repository;
+    private EspecialidadeService service;
 
-    @ResponseBody
-    @PostMapping("/salvar")
-    public Especialidade salvar(@RequestBody @Valid Especialidade especialidade){
-        return repository.save(especialidade);
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Especialidade salvar(@RequestBody Especialidade especialidade) {
+        return service.salvar(especialidade);
     }
 
-    @GetMapping("/busca/{id}")
+    @GetMapping("/{id}")
     @ResponseBody
-    public Especialidade busca(@PathVariable Long id){
-        return repository.
-                findById(id)
-                .orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND)));
+    public Especialidade busca(@PathVariable Long id) {
+        return service.busca(id);
     }
 
-    @GetMapping("/busca-nome/{nome}")
+    @GetMapping("/nome/{nome}")
     @ResponseBody
-    public Especialidade buscaPorNome(@PathVariable String nome){
-        return repository
-                .findByNomeLike(nome)
-                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public Especialidade busca(@PathVariable String nome) {
+        return service.busca(nome);
     }
 
-    @GetMapping("/lista")
+    @GetMapping
     @ResponseBody
-    public List<Especialidade>lista(){
-        return repository.findAll();
+    public List<Especialidade> lista() {
+        return service.listar();
     }
 
-    @PutMapping("/atualizar/{id}")
+    @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void atualizar(@PathVariable Long id, @RequestBody @Valid Especialidade especialidadeatualizada){
-        repository
-                .findById(id)
-                .map(especialidade1 -> {
-                    especialidade1.setId(id);
-                    especialidade1.setNome(especialidadeatualizada.getNome());
-                    repository.save(especialidade1);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void atualizar(@RequestBody Especialidade especialidade, @PathVariable Long id) {
+        service.atualizar(especialidade, id);
     }
 
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping("/deletar/{id}")
-    public void delete(@PathVariable Long id){
-        repository
-                .findById(id)
-                .map(especialidade -> {
-                    repository.delete(especialidade);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public void deletar(@PathVariable Long id) {
+        service.deletar(id);
     }
 }

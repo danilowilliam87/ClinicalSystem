@@ -4,6 +4,7 @@ import io.github.danilowilliam.ClinicalSystem.dto.request.EnderecoRequestDTO;
 import io.github.danilowilliam.ClinicalSystem.dto.response.EnderecoResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Endereco;
 import io.github.danilowilliam.ClinicalSystem.repository.EnderecoRepository;
+import io.github.danilowilliam.ClinicalSystem.services.EnderecoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,85 +15,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/endereco")
+@RequestMapping("/enderecos")
 public class EnderecoController {
 
     @Autowired
-    private EnderecoRepository repository;
+    private EnderecoService service;
 
-   @PostMapping("/salvar")
-   @ResponseBody
-   public Endereco salvar(@RequestBody @Valid EnderecoRequestDTO endereco){
-       return repository.save(endereco.converter());
-   }
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    public Endereco salvar(@RequestBody Endereco endereco) {
+        return service.salvar(endereco);
+    }
 
-   @GetMapping("/busca/{id}")
-   @ResponseBody
-   public Endereco buscaPorId(@PathVariable Long id){
-       return repository.findById(id)
-               .map(endereco -> {
-                   EnderecoResponseDTO.converter(endereco);
-                   return endereco;
-               }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-   }
+    @GetMapping("/{id}")
+    public Endereco busca(@PathVariable Long id) {
+        return service.busca(id);
+    }
 
-   @GetMapping("/busca-cep/{cep}")
-   @ResponseBody
-   public Endereco buscaPeloCep(@PathVariable String cep){
-       return repository.findByCepLike(cep)
-               .map(endereco -> {
-                   EnderecoResponseDTO.converter(endereco);
-                   return endereco;
-               }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-   }
+    @GetMapping("/cep/{cep}")
+    public Endereco busca(@PathVariable String cep) {
+        return service.busca(cep);
+    }
 
+    @PutMapping
+    public void atualizar(@RequestBody Endereco endereco, @PathVariable Long id) {
+        service.atualizar(endereco, id);
+    }
 
-   @GetMapping("/busca-logradouro/{logradouro}")
-   @ResponseBody
-   public Endereco buscaPeloLogradouro(@PathVariable String logradouro){
-       return repository.findByLogradouroLike(logradouro)
-               .map(endereco -> {
-                   EnderecoResponseDTO.converter(endereco);
-                   return endereco;
-               }).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-   }
+    @GetMapping
+    public List<Endereco> listar() {
+        return service.listar();
+    }
 
+    @DeleteMapping("/{id}")
+    public void deletar(@PathVariable Long id) {
+        service.deletar(id);
+    }
 
-   @ResponseStatus(HttpStatus.NO_CONTENT)
-   @PutMapping("/atualizar/{id}")
-   public void atualizar(@RequestBody @Valid EnderecoRequestDTO dto, @PathVariable Long id){
-        repository.findById(id)
-        .map(endereco -> {
-            endereco.setCep(dto.getCep());
-            endereco.setLogradouro(dto.getLogradouro());
-            endereco.setNumero(dto.getNumero());
-            endereco.setCidade(dto.getCidade());
-            endereco.setEstado(dto.getEstado());
-            repository.save(endereco);
-            return Void.TYPE;
-        }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-   }
-
-
-   @GetMapping("/lista")
-   public List<EnderecoResponseDTO>lista(){
-       List<EnderecoResponseDTO>listaTodos = new ArrayList<>();
-       repository.findAll()
-               .stream()
-               .forEach(endereco -> {
-                   listaTodos.add(EnderecoResponseDTO.converter(endereco));
-               });
-       return listaTodos;
-   }
-
-   @DeleteMapping("/deletar/{id}")
-   @ResponseStatus(HttpStatus.NO_CONTENT)
-   public void deletar(@PathVariable Long id){
-       repository.findById(id)
-               .map(endereco -> {
-                   repository.deleteById(id);
-                   return Void.TYPE;
-               }).orElseThrow(() -> new ResponseStatusException((HttpStatus.NOT_FOUND)));
-   }
-
+    @PatchMapping("/{id}")
+    public void atualizacaoParcial(@RequestBody  Endereco endereco, @PathVariable Long id){
+        service.atualizacaoParcial(endereco, id);
+    }
 }
