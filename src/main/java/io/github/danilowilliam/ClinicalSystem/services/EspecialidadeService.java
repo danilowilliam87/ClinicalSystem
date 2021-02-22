@@ -16,16 +16,15 @@ public class EspecialidadeService {
     @Autowired
     EspecialidadeRepository repository;
 
-    public Especialidade salvar(Especialidade especialidade) {
-        Optional<Especialidade> busca = repository.findByNomeLike(especialidade.getNome());
+    public Especialidade salvar(Especialidade especialidadeNova) {
+        Optional<Especialidade> busca = repository.findByNomeLike(especialidadeNova.getNome());
         if (busca.isPresent()) {
-            busca.map(especialidade1 -> {
-                especialidade.setNome(especialidade1.getNome());
-                especialidade.setId(especialidade1.getId());
-                return repository.save(especialidade);
+            busca.map(especialidadeAtual -> {
+                especialidadeNova.setId(especialidadeAtual.getId());
+                return repository.save(especialidadeNova);
             });
         }
-        return repository.save(especialidade);
+        return repository.save(especialidadeNova);
     }
 
     public Especialidade busca(Long id) {

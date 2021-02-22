@@ -22,11 +22,8 @@ public class MedicoService {
         Optional<Medico> busca = repository.findByCrmLike(medico.getCrm());
         if(busca.isPresent()){
             busca.map(atualizarMedico -> {
-                atualizarMedico.setNome(medico.getNome());
-                atualizarMedico.setCpf(medico.getCpf());
-                atualizarMedico.setCrm(medico.getCrm());
-                atualizarMedico.setEspecialidade(medico.getEspecialidade());
-                return repository.save(atualizarMedico);
+              medico.setId(atualizarMedico.getId());
+                return repository.save(medico);
             });
         }
         return repository.save(medico);

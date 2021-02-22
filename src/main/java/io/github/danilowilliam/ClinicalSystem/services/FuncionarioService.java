@@ -21,22 +21,19 @@ public class FuncionarioService {
     private GeradorDeMatricula matricula;
 
     //se o funcionário existir ...atualiza ..se não , salva(não é premitido cadastros repetidos)
-    public Funcionario salvar(Funcionario funcionario){
+    public Funcionario salvar(Funcionario funcionarioNovo){
         Optional<Funcionario> buscaFuncionario = repository
-                .findByCpfLike(funcionario.getCpf());
+                .findByCpfLike(funcionarioNovo.getCpf());
         if (buscaFuncionario.isPresent()){
-            buscaFuncionario.map(funcionarioParaAtualizar -> {
-                funcionarioParaAtualizar.setNome(funcionario.getNome());
-                funcionarioParaAtualizar.setEmail(funcionario.getEmail());
-                funcionarioParaAtualizar.setPerfil(funcionario.getPerfil());
-                funcionarioParaAtualizar.setSenha(funcionario.getSenha());
-                return repository.save(funcionarioParaAtualizar);
+            buscaFuncionario.map(funcionarioAtual -> {
+               funcionarioNovo.setId(funcionarioAtual.getId());
+                return repository.save(funcionarioNovo);
             });
 
         }
-        funcionario.setPerfil("USER");
-        funcionario.setMatricula(matricula.gerarMatricula());
-        return repository.save(funcionario);
+        funcionarioNovo.setPerfil("USER");
+        funcionarioNovo.setMatricula(matricula.gerarMatricula());
+        return repository.save(funcionarioNovo);
     }
 
     public void atualizar(Funcionario funcionario, Long id){

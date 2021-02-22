@@ -22,22 +22,25 @@ public class MedicoController {
     private MedicoService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public MedicoResponseDTO salvar(@RequestBody MedicoRequestDTO dto){
         return MedicoResponseDTO.converter(service.salvar(dto.converter()));
     }
 
     @GetMapping("/{id}")
+    @ResponseBody
     public MedicoResponseDTO buscar(@PathVariable Long id){
         return MedicoResponseDTO.converter(service.busca(id));
     }
 
     @GetMapping("/crm/{crm}")
+    @ResponseBody
     public MedicoResponseDTO buscaPorCrm(@PathVariable String crm){
         return MedicoResponseDTO.converter(service.busca(crm));
     }
 
     @PatchMapping("/{id}")
-    @ResponseBody
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void atualizar(@PathVariable Long id, @RequestBody MedicoRequestDTO dto){
         service.atualizacaoParcial(dto.converter(), id);
     }

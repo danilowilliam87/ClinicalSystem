@@ -1,9 +1,13 @@
 package io.github.danilowilliam.ClinicalSystem.services;
 
+import io.github.danilowilliam.ClinicalSystem.dto.request.PacienteRequestDTO;
+import io.github.danilowilliam.ClinicalSystem.dto.response.PacienteResponseDTO;
 import io.github.danilowilliam.ClinicalSystem.model.Paciente;
 import io.github.danilowilliam.ClinicalSystem.repository.PacienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,38 +18,67 @@ public class PacienteService {
     @Autowired
     private PacienteRepository repository;
 
-    public List<Paciente>listarTodos(){
+    public Paciente salvar(Paciente pacienteNovo){
+        Optional<Paciente> buscaPaciente = repository.findByCpfLike(pacienteNovo.getCpf());
+        if (buscaPaciente.isPresent()){
+            buscaPaciente.map(paciente -> {
+                pacienteNovo.setId(paciente.getId());
+                return repository.save(pacienteNovo);
+            });
+        }
+            return repository.save(pacienteNovo);
+    }
+
+    public Paciente buscar(Long id){
+        return repository
+                .findById(id)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public Paciente buscar(String cpf){
+        return repository
+                .findByCpfLike(cpf)
+                .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public void atualizar(Paciente paciente, Long id){
+        repository
+                .findById(id)
+                .map(pacienteAtual -> {
+                    paciente.setId(pacienteAtual.getId());
+                    repository.save(paciente);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public void atualizacaoParcial(Paciente paciente, Long id){
+        repository
+                .findById(id)
+                .map(pacienteAtual -> {
+                    pacienteAtual.setNome(Optional.ofNullable(paciente.getNome())
+                    .orElse(pacienteAtual.getNome()));
+                    pacienteAtual.setCpf(Optional.ofNullable(paciente.getCpf())
+                    .orElse(pacienteAtual.getCpf()));
+                    pacienteAtual.setEmail(Optional.ofNullable(paciente.getEmail())
+                    .orElse(pacienteAtual.getEmail()));
+                    pacienteAtual.setEndereco(Optional.ofNullable(paciente.getEndereco())
+                    .orElse(pacienteAtual.getEndereco()));
+                    pacienteAtual.setConvenio(Optional.ofNullable(paciente.getConvenio())
+                    .orElse(pacienteAtual.getConvenio()));
+                    pacienteAtual.setTelefone(Optional.ofNullable(paciente.getTelefone())
+                    .orElse(pacienteAtual.getTelefone()));
+                    pacienteAtual.setDataNascimento(Optional.ofNullable(paciente.getDataNascimento())
+                    .orElse(pacienteAtual.getDataNascimento()));
+                    repository.save(pacienteAtual);
+                    return Void.TYPE;
+                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    }
+
+    public List<Paciente> listar(){
         return repository.findAll();
     }
-    public Optional<Paciente>buscaPorId(Long id){
-        return repository.findById(id);
-    }
-    public Paciente salvar(Paciente paciente){
-        return repository.save(paciente);
-    }
 
-    public boolean atualizar(Long id, Paciente paciente){
-        Optional<Paciente>antigo = repository.findById(id);
-        if(antigo.isPresent()){
-            Paciente novo = antigo.get();
-            novo.setNome(paciente.getNome());
-            novo.setCpf(paciente.getCpf());
-            novo.setEmail(paciente.getEmail());
-            novo.setDataNascimento(paciente.getDataNascimento());
-            novo.setTelefone(paciente.getTelefone());
-            novo.setConvenio(paciente.getConvenio());
-            novo.setConsultas(paciente.getConsultas());
-            novo.setEndereco(paciente.getEndereco());
-            repository.save(novo);
-            return true;
-        }else {
-            return false;
-        }
-    }
-
-    public boolean deletar(Long id){
-        Optional<Paciente>busca = repository.findById(id);
-        busca.ifPresent(resultado -> repository.delete(resultado));
-        return true;
+    public void deletar(Long id){
+        repository.delete(buscar(id));
     }
 }
