@@ -6,6 +6,7 @@ import io.github.danilowilliam.ClinicalSystem.model.Paciente;
 import io.github.danilowilliam.ClinicalSystem.repository.ConvenioRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.EnderecoRepository;
 import io.github.danilowilliam.ClinicalSystem.repository.PacienteRepository;
+import io.github.danilowilliam.ClinicalSystem.services.PacienteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,116 +15,56 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
-@RequestMapping("/paciente")
+@RequestMapping("/pacientes")
 public class PacienteController {
 
-    @Autowired
-    private PacienteRepository repository;
+
 
     @Autowired
-    private EnderecoRepository enderecoRepository;
+    private PacienteService service;
 
-    @Autowired
-    private ConvenioRepository convenioRepository;
-
-    @PostMapping("/salvar")
+    @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public PacienteResponseDTO salvar(@RequestBody @Valid PacienteRequestDTO dto){
-        //busca endereço para vincular ao paciente
-        enderecoRepository
-                .findByCepLike(dto.getEndereco().getCep())
-                .map(endereco -> {
-                    dto.setEndereco(endereco);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        //busca convênio para vincular ao paciente
-        convenioRepository
-                .findByNomeLike(dto.getConvenio().getNome())
-                .map(convenio -> {
-                    dto.setConvenio(convenio);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        Paciente paciente = repository.save(dto.converter());
-        return PacienteResponseDTO.converter(paciente);
+    public PacienteResponseDTO salvar(@RequestBody PacienteRequestDTO dto){
+        return PacienteResponseDTO.converter(service.salvar(dto.converter()));
     }
 
-    @GetMapping("/busca/{id}")
+    @GetMapping("/{cpf}")
     @ResponseBody
-    public PacienteResponseDTO busca(@PathVariable Long id){
-       return repository
-                .findById(id)
-                .map(paciente -> {
-                    return PacienteResponseDTO.converter(paciente);
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    public PacienteResponseDTO buscar(@PathVariable String cpf){
+        return PacienteResponseDTO.converter(service.buscar(cpf));
     }
 
-    @GetMapping("/busca-nome/{nome}")
-    @ResponseBody
-    public PacienteResponseDTO buscaPorNome(@PathVariable String nome){
-        return repository
-                .findByNomeLike(nome)
-                .map(paciente -> {
-                    return PacienteResponseDTO.converter(paciente);
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizar(@RequestBody PacienteRequestDTO dto, @PathVariable Long id){
+        service.atualizar(dto.converter(), id);
     }
 
-
-    @GetMapping("/busca-cpf/{cpf}")
-    @ResponseBody
-    public PacienteResponseDTO buscaPorCpf(@PathVariable String cpf){
-        return repository
-                .findByCpfLike(cpf)
-                .map(paciente -> {
-                    return PacienteResponseDTO.converter(paciente);
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void atualizacaoParcial(@RequestBody PacienteRequestDTO dto, @PathVariable Long id){
+        service.atualizacaoParcial(dto.converter(), id);
     }
 
-    @GetMapping("/lista")
+    @GetMapping
     @ResponseBody
-    public List<PacienteResponseDTO>listarTodos(){
-        List<PacienteResponseDTO>lista = new ArrayList<>();
-        repository
-                .findAll()
-                .stream()
+    public List<PacienteResponseDTO>listar(){
+        List<PacienteResponseDTO> lista = new ArrayList<>();
+        service.listar()
                 .forEach(paciente -> {
                     lista.add(PacienteResponseDTO.converter(paciente));
                 });
-
         return lista;
     }
 
-
-    @PutMapping("/atualizar/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void  atualizar(@RequestBody @Valid PacienteRequestDTO dto, @PathVariable Long id){
-        repository
-                .findById(id)
-                .map(paciente ->  {
-                    paciente.setId(id);
-                    paciente.setNome(dto.getNome());
-                    paciente.setEmail(dto.getEmail());
-                    paciente.setTelefone(dto.getTelefone());
-                    paciente.setDataNascimento(dto.getDataNascimento());
-                    paciente.setEndereco(dto.getEndereco());
-                    paciente.setConvenio(dto.getConvenio());
-                    repository.save(paciente);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-    }
-
-    @DeleteMapping("/deletar/{id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
-        repository
-                .findById(id)
-                .map(paciente -> {
-                    repository.delete(paciente);
-                    return Void.TYPE;
-                }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        service.deletar(id);
     }
 
 }

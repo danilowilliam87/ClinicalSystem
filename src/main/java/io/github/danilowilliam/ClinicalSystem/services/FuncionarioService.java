@@ -40,14 +40,8 @@ public class FuncionarioService {
         repository
                 .findById(id)
                 .map(funcionarioParaAtualizar->{
-                    funcionarioParaAtualizar.setId(id);
-                    funcionarioParaAtualizar.setNome(funcionario.getNome());
-                    funcionarioParaAtualizar.setEmail(funcionario.getEmail());
-                    funcionarioParaAtualizar.setCpf(funcionario.getCpf());
-                    funcionarioParaAtualizar.setPerfil(funcionario.getPerfil());
-                    funcionarioParaAtualizar.setMatricula(funcionario.getMatricula());
-                    funcionarioParaAtualizar.setSenha(funcionario.getSenha());
-                    repository.save(funcionarioParaAtualizar);
+                    funcionario.setId(funcionarioParaAtualizar.getId());
+                    repository.save(funcionario);
                     return Void.TYPE;
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
