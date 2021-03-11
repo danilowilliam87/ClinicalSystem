@@ -60,7 +60,6 @@ public class ConsultaService {
                     consulta.setSituacao(StatusConsulta.EM_ESPERA);
                     return repository.save(consulta);
                 }).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
     }
 
     public Consulta darBaixaNaConsulta(Long id){

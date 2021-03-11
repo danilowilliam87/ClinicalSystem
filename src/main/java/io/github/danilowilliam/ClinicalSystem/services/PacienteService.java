@@ -18,14 +18,19 @@ public class PacienteService {
     @Autowired
     private PacienteRepository repository;
 
+    @Autowired
+    private EnderecoService service;
+
     public Paciente salvar(Paciente pacienteNovo){
         Optional<Paciente> buscaPaciente = repository.findByCpfLike(pacienteNovo.getCpf());
         if (buscaPaciente.isPresent()){
             buscaPaciente.map(paciente -> {
                 pacienteNovo.setId(paciente.getId());
+                pacienteNovo.setEndereco(service.busca(pacienteNovo.getEndereco().getId()));
                 return repository.save(pacienteNovo);
             });
         }
+            pacienteNovo.setEndereco(service.busca(pacienteNovo.getEndereco().getId()));
             return repository.save(pacienteNovo);
     }
 

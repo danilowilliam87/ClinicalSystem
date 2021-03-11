@@ -16,7 +16,7 @@ public class PacienteResponseDTO {
     private String email;
     private String telefone;
     private LocalDate dataNascimento;
-    private String rua;
+    private String logradouro;
     private int numero;
     private String cidade;
     private String estado;

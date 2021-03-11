@@ -61,7 +61,7 @@ public class PacienteController {
         return lista;
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deletar(@PathVariable Long id){
         service.deletar(id);
